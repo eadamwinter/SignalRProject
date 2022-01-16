@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SignalRProject
 {
@@ -28,6 +29,20 @@ namespace SignalRProject
         {
 
             services.AddControllers();
+
+            // This allows to connect via SignalR with html file from disk - thats why origin = "null"
+            services.AddCors(options => options.AddPolicy(name : "MyPolicy",
+                builder =>
+                        {
+                            builder.WithOrigins("null")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                        }));
+            
+            services.AddSignalR();
+                      
+            services.AddSingleton<ParenthesisChecker>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SignalRProject", Version = "v1" });
@@ -44,15 +59,20 @@ namespace SignalRProject
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SignalRProject v1"));
             }
 
-            app.UseHttpsRedirection();
+            // enable redicrection to all but not for Hub connection
+            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/path"),
+                                    builder => builder.UseHttpsRedirection());
 
             app.UseRouting();
+
+            app.UseCors("MyPolicy");
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                //endpoints.MapControllers();
+                endpoints.MapHub<MyHub>("/path");
             });
         }
     }

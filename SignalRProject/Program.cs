@@ -13,10 +13,7 @@ namespace SignalRProject
     {
         public static void Main(string[] args)
         {
-            ParenthesisChecker pc = new ParenthesisChecker();
-            string wynik = pc.CheckParenthesis("a");
-            System.Console.WriteLine(wynik);
-            //CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -14,6 +14,9 @@ namespace SignalRProject
                 return result;
 
             Stack ParenthesisStack = new Stack();
+            
+            // setting result in case that the given string is incorrect
+            result = "Wrong combination";
 
             for(var i = 0; i<StringToCheck.Length; i++)
             {
@@ -23,7 +26,6 @@ namespace SignalRProject
                 {
                     if(ParenthesisStack.Count == 0)
                     {
-                        result = "Wrong combination";
                         return result;
                     }
 
@@ -31,7 +33,6 @@ namespace SignalRProject
 
                     if(!CheckForCorrectParenthesis(sign, signFromStack))
                     {
-                        result = "Wrong combination";
                         return result;
                     }
                     
@@ -48,10 +49,11 @@ namespace SignalRProject
 
             if(ParenthesisStack.Count == 0)
                 result = "The given combination is correct";
+
             return result;
         }
 
-        public bool CheckForOpenParenthesis(char sign)
+        private bool CheckForOpenParenthesis(char sign)
         {
             List<int> AsciiCodes = new List<int>() {40, 60, 91, 123};
             if(AsciiCodes.Contains((int)sign))
@@ -61,7 +63,7 @@ namespace SignalRProject
             return false;
         }
 
-        public bool CheckForClosedParenthesis(char sign) 
+        private bool CheckForClosedParenthesis(char sign) 
         {
             List<int> AsciiCodes = new List<int>() {41, 62, 93, 125};
             if(AsciiCodes.Contains((int)sign))
@@ -71,7 +73,7 @@ namespace SignalRProject
             return false;
         }
 
-        public bool CheckForCorrectParenthesis(char sign, char signFromStack)
+        private bool CheckForCorrectParenthesis(char sign, char signFromStack)
         {
             int ClosingParenthesis = (int)sign;
             int OpeningParenthesis = (int)signFromStack;
