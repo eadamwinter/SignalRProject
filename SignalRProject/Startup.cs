@@ -34,7 +34,7 @@ namespace SignalRProject
             services.AddCors(options => options.AddPolicy(name : "MyPolicy",
                 builder =>
                         {
-                            builder.WithOrigins("null")
+                            builder.WithOrigins("null","http://localhost:5000")
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
